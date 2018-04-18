@@ -106,8 +106,6 @@ void Write_IIC_Byte(unsigned char IIC_Byte)
 		OLED_SCLK_Set();
 		OLED_SCLK_Clr();
 		}
-
-
 }
 /**********************************************
 // IIC Write Command
@@ -139,18 +137,12 @@ void Write_IIC_Data(unsigned char IIC_Data)
 }
 void OLED_WR_Byte(unsigned dat,unsigned cmd)
 {
-	if(cmd)
-			{
-
-   Write_IIC_Data(dat);
-   
-		}
+	if(cmd) {
+        Write_IIC_Data(dat);
+    }
 	else {
-   Write_IIC_Command(dat);
-		
+        Write_IIC_Command(dat);	
 	}
-
-
 }
 
 
@@ -165,10 +157,9 @@ void fill_picture(unsigned char fill_Data)
 		OLED_WR_Byte(0xb0+m,0);		//page0-page1
 		OLED_WR_Byte(0x00,0);		//low column start address
 		OLED_WR_Byte(0x10,0);		//high column start address
-		for(n=0;n<128;n++)
-			{
-				OLED_WR_Byte(fill_Data,1);
-			}
+		for(n=0;n<128;n++){
+            OLED_WR_Byte(fill_Data,1);
+		}
 	}
 }
 
@@ -192,8 +183,9 @@ void Delay_1ms(unsigned int Del_1ms)
 
 //坐标设置
 
-	void OLED_Set_Pos(unsigned char x, unsigned char y) 
-{ 	OLED_WR_Byte(0xb0+y,OLED_CMD);
+void OLED_Set_Pos(unsigned char x, unsigned char y) 
+{ 	
+    OLED_WR_Byte(0xb0+y,OLED_CMD);
 	OLED_WR_Byte(((x&0xf0)>>4)|0x10,OLED_CMD);
 	OLED_WR_Byte((x&0x0f),OLED_CMD); 
 }   	  
@@ -242,23 +234,22 @@ void OLED_On(void)
 void OLED_ShowChar(u8 x,u8 y,u8 chr,u8 Char_Size)
 {      	
 	unsigned char c=0,i=0;	
-		c=chr-' ';//得到偏移后的值			
-		if(x>Max_Column-1){x=0;y=y+2;}
-		if(Char_Size ==16)
-			{
-			OLED_Set_Pos(x,y);	
-			for(i=0;i<8;i++)
-			OLED_WR_Byte(F8X16[c*16+i],OLED_DATA);
-			OLED_Set_Pos(x,y+1);
-			for(i=0;i<8;i++)
-			OLED_WR_Byte(F8X16[c*16+i+8],OLED_DATA);
-			}
-			else {	
-				OLED_Set_Pos(x,y);
-				for(i=0;i<6;i++)
-				OLED_WR_Byte(F6x8[c][i],OLED_DATA);
-				
-			}
+	c=chr-' ';//得到偏移后的值			
+	if(x>Max_Column-1){x=0;y=y+2;}
+	if(Char_Size ==16)
+	{
+        OLED_Set_Pos(x,y);	
+        for(i=0;i<8;i++)
+        OLED_WR_Byte(F8X16[c*16+i],OLED_DATA);
+        OLED_Set_Pos(x,y+1);
+        for(i=0;i<8;i++)
+        OLED_WR_Byte(F8X16[c*16+i+8],OLED_DATA);
+	}
+	else {	
+		OLED_Set_Pos(x,y);
+		for(i=0;i<6;i++)
+		OLED_WR_Byte(F6x8[c][i],OLED_DATA);
+	}
 }
 //m^n函数
 u32 oled_pow(u8 m,u8 n)
@@ -287,7 +278,6 @@ void OLED_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 size2)
 				OLED_ShowChar(x+(size2/2)*t,y,' ',size2);
 				continue;
 			}else enshow=1; 
-		 	 
 		}
 	 	OLED_ShowChar(x+(size2/2)*t,y,temp+'0',size2); 
 	}
@@ -297,10 +287,11 @@ void OLED_ShowString(u8 x,u8 y,u8 *chr,u8 Char_Size)
 {
 	unsigned char j=0;
 	while (chr[j]!='\0')
-	{		OLED_ShowChar(x,y,chr[j],Char_Size);
-			x+=8;
+	{		
+        OLED_ShowChar(x,y,chr[j],Char_Size);
+		x+=8;
 		if(x>120){x=0;y+=2;}
-			j++;
+        j++;
 	}
 }
 //显示汉字
@@ -309,29 +300,29 @@ void OLED_ShowCHinese(u8 x,u8 y,u8 no)
 	u8 t,adder=0;
 	OLED_Set_Pos(x,y);	
     for(t=0;t<16;t++)
-		{
-				OLED_WR_Byte(Hzk[2*no][t],OLED_DATA);
-				adder+=1;
-     }	
-		OLED_Set_Pos(x,y+1);	
+	{
+        OLED_WR_Byte(Hzk[2*no][t],OLED_DATA);
+        adder+=1;
+    }	
+	OLED_Set_Pos(x,y+1);	
     for(t=0;t<16;t++)
-			{	
-				OLED_WR_Byte(Hzk[2*no+1][t],OLED_DATA);
-				adder+=1;
-      }					
+	{	
+        OLED_WR_Byte(Hzk[2*no+1][t],OLED_DATA);
+        adder+=1;
+    }					
 }
 /***********功能描述：显示显示BMP图片128×64起始点坐标(x,y),x的范围0～127，y为页的范围0～7*****************/
 void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[])
 { 	
- unsigned int j=0;
- unsigned char x,y;
+    unsigned int j=0;
+    unsigned char x,y;
   
-  if(y1%8==0) y=y1/8;      
-  else y=y1/8+1;
+    if(y1%8==0) y=y1/8;      
+    else y=y1/8+1;
 	for(y=y0;y<y1;y++)
 	{
-		OLED_Set_Pos(x0,y);
-    for(x=x0;x<x1;x++)
+        OLED_Set_Pos(x0,y);
+        for(x=x0;x<x1;x++)
 	    {      
 	    	OLED_WR_Byte(BMP[j++],OLED_DATA);	    	
 	    }
@@ -341,23 +332,21 @@ void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned 
 //初始化SSD1306					    
 void OLED_Init(void)
 { 	
- 
- 	 
  	GPIO_InitTypeDef  GPIO_InitStructure;
  	
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC|RCC_APB2Periph_GPIOE, ENABLE);	 //使能PD端口时钟
+ 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 //使能PD端口时钟
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;	 //PD3,PD6推挽输出  
- 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+ 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; //推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速度50MHz
- 	GPIO_Init(GPIOC, &GPIO_InitStructure);	  //初始化GPIOD3,6
- 	GPIO_SetBits(GPIOC,GPIO_Pin_14);	//PD7,PD6 输出高
+ 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+ 	GPIO_SetBits(GPIOB,GPIO_Pin_7);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;	 //PD3,PD6推挽输出  
- 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+ 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; //推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速度50MHz
- 	GPIO_Init(GPIOE, &GPIO_InitStructure);	  //初始化GPIOD3,6
- 	GPIO_SetBits(GPIOE,GPIO_Pin_6);	//PD7,PD6 输出高
+ 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+ 	GPIO_SetBits(GPIOB,GPIO_Pin_6);
 
     delay_ms(200);
 
@@ -397,34 +386,4 @@ void OLED_Init(void)
 	OLED_WR_Byte(0xAF,OLED_CMD);//--turn on oled panel
     
     OLED_Clear();
-
 }  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

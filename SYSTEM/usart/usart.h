@@ -37,8 +37,8 @@ extern u16 Temp[3], test_label, Data_TDS;
 
 //如果想串口中断接收，请不要注释以下宏定义
 void uart_init(u32 bound);
+void uart2_init(u32 bound);
 void uart3_init(u32 bound);
-void uart4_init(u32 bound);
 #endif
 
 

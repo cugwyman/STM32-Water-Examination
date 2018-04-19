@@ -88,7 +88,7 @@ u8 USART_RX_BUF[USART_REC_LEN];     //接收缓冲,最大USART_REC_LEN个字节.
 u16 USART_RX_STA=0;       //接收状态标记	  
 u16 BUF ;
 unsigned char sign, counter = 0;
-u16 Temp[3], test_label, Data_TDS;
+u16 Temp[5], test_label, Data_TDS;
   
 void uart_init(u32 bound){
   //GPIO端口设置
@@ -215,30 +215,30 @@ void uart3_init(u32 bound){
 
 }
 
-void USART1_IRQHandler(void)                	//串口1中断服务程序
+void USART3_IRQHandler(void)                	//串口1中断服务程序
 {
 //	u8 Res;
 //    u16 buff_temp = 0;
 
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
-	{
+//	if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+//	{
 //        buff_temp = USART_ReceiveData(USART1);	
 //        if(buff_temp)
 //        BUF = buff_temp;
 //        sign=1;
  
 /*收坐标轴 */        
-        Temp[counter] = USART_ReceiveData(USART1);   //接收数据
-        if(counter == 0 && Temp[0] != 0xfd) return;      //第 0 号数据不是帧头，跳过
-        counter++; 
-        if(counter > 4) //接收到 3 个数据
-        { 
-            test_label = Temp[0];
-            Data_TDS = Temp[2];
-            Data_TDS = Data_TDS<<8|Temp[1];            
-            counter=0; //重新赋值，准备下一帧数据的接收
-            sign=1;
-        }
+//        Temp[counter] = USART_ReceiveData(USART3);   //接收数据
+//        if(counter == 0 && Temp[0] != 0xfd) return;      //第 0 号数据不是帧头，跳过
+//        counter++; 
+//        if(counter > 4) //接收到 3 个数据
+//        { 
+//            test_label = Temp[0];
+//            Data_TDS = Temp[2];
+//            Data_TDS = Data_TDS<<8|Temp[1];            
+//            counter=0; //重新赋值，准备下一帧数据的接收
+//            sign=1;
+//        }
 
         
 /*发坐标轴
@@ -273,12 +273,26 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 //					}		 
 //				}
 //			}   		 
-     } 
+//     } 
 } 
 
-void USART3_IRQHandler(void)
+void USART1_IRQHandler(void)
 {
 }
 
+void USART3_Receive(void)
+{
+    Temp[counter] = USART_ReceiveData(USART3);   //接收数据
+    if(counter == 0 && Temp[0] != 0x00) return;      //第 0 号数据不是帧头，跳过
+    counter++; 
+    if(counter >= 4) //接收到 5 个数据
+    { 
+        test_label = Temp[0];
+        Data_TDS = Temp[2];
+        Data_TDS = Data_TDS<<8|Temp[1];            
+        counter=0; //重新赋值，准备下一帧数据的接收
+//        sign=1;
+    }
+}
 #endif	
 

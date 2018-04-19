@@ -33,12 +33,13 @@ extern u8  USART_RX_BUF[USART_REC_LEN]; //½ÓÊÕ»º³å,×î´óUSART_REC_LEN¸ö×Ö½Ú.Ä©×Ö½
 extern u16 USART_RX_STA;         		//½ÓÊÕ×´Ì¬±ê¼Ç	
 extern u16 BUF ;
 extern unsigned char sign, counter;
-extern u16 Temp[3], test_label, Data_TDS;
+extern u16 Temp[5], test_label, Data_TDS;
 
 //Èç¹ûÏë´®¿ÚÖĞ¶Ï½ÓÊÕ£¬Çë²»Òª×¢ÊÍÒÔÏÂºê¶¨Òå
 void uart_init(u32 bound);
 void uart2_init(u32 bound);
 void uart3_init(u32 bound);
+void USART3_Receive(void);
 #endif
 
 

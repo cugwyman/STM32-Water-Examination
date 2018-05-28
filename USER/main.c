@@ -26,7 +26,9 @@ int main(void)
 //    u16 Data_TDS;
 	short temperature;    	   
     u16 adcx;
+    u16 adcx2;
 	float PH_temp;
+	float TU_temp;
     u8 OLED_cnt = 0;
     
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);	 //设置NVIC中断分组2:2位抢占优先级，2位响应优先级
@@ -35,6 +37,7 @@ int main(void)
     uart_init(9600);       //LoRa
     OLED_Init();        
  	Adc_Init();		  		//ADC初始化
+ 	Adc2_Init();
     DS18B20_Init();
     
     Temp[0]=6;
@@ -45,7 +48,9 @@ int main(void)
  	while(1)
 	{
         adcx = Get_Adc_Average(ADC_Channel_1,10);
+        adcx2 = Get_Adc_Average2(ADC_Channel_11,10);
         PH_temp = (float)(adcx*0.001*(-5.9647)+22.255);
+        TU_temp = (float)(adcx2*(-0.538)+4.61);
         OLED_cnt++;
 //		USART_SendData(USART3, (char)0xfd);
 //		USART_SendData(USART3, (char)0xfd);
@@ -88,8 +93,8 @@ int main(void)
 //            OLED_ShowString(0,2,(u8 *)"PH : ",16);
 //            OLED_ShowString(0,4,(u8 *)"TEM: ",16);
 
-            printf("TDS: %d   \n", Data_TDS);
-            printf("ph:  %f   \n", PH_temp);
+            printf("TU: %f   \n", TU_temp);
+            printf("PH:  %f   \n", PH_temp);
             printf("TEM: %d.%dc  \n", temperature/10, temperature%10);
 
         }
